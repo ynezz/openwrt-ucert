@@ -51,17 +51,17 @@ int _usign_key_is_revoked(const char *fingerprint, const char *pubkeydir) {
 int usign_s(const char *msgfile, const char *seckeyfile, const char *sigfile, bool quiet) {
 	pid_t pid;
 	int status;
-	const char *usign_argv[16] = {0};
+	char* usign_argv[16] = {0};
 	unsigned int usign_argc = 0;
 
 	usign_argv[usign_argc++] = USIGN_EXEC;
 	usign_argv[usign_argc++] = "-S";
 	usign_argv[usign_argc++] = "-m";
-	usign_argv[usign_argc++] = msgfile;
+	usign_argv[usign_argc++] = strdup(msgfile);
 	usign_argv[usign_argc++] = "-s";
-	usign_argv[usign_argc++] = seckeyfile;
+	usign_argv[usign_argc++] = strdup(seckeyfile);
 	usign_argv[usign_argc++] = "-x";
-	usign_argv[usign_argc++] = sigfile;
+	usign_argv[usign_argc++] = strdup(sigfile);
 
 	if (quiet)
 		usign_argv[usign_argc++] = "-q";
@@ -104,7 +104,7 @@ static int usign_f(char *fingerprint, const char *pubkeyfile, const char *seckey
 	int fds[2];
 	pid_t pid;
 	int status;
-	const char *usign_argv[16] = {0};
+	char *usign_argv[16] = {0};
 	unsigned int usign_argc = 0;
 
 	if (pipe(fds))
@@ -115,17 +115,17 @@ static int usign_f(char *fingerprint, const char *pubkeyfile, const char *seckey
 
 	if (pubkeyfile) {
 		usign_argv[usign_argc++] = "-p";
-		usign_argv[usign_argc++] = pubkeyfile;
+		usign_argv[usign_argc++] = strdup(pubkeyfile);
 	}
 
 	if (seckeyfile) {
 		usign_argv[usign_argc++] = "-s";
-		usign_argv[usign_argc++] = seckeyfile;
+		usign_argv[usign_argc++] = strdup(seckeyfile);
 	}
 
 	if (sigfile) {
 		usign_argv[usign_argc++] = "-x";
-		usign_argv[usign_argc++] = sigfile;
+		usign_argv[usign_argc++] = strdup(sigfile);
 	}
 
 	pid = fork();
@@ -203,7 +203,7 @@ int usign_v(const char *msgfile, const char *pubkeyfile,
 	    const char *pubkeydir, const char *sigfile, bool quiet) {
 	pid_t pid;
 	int status;
-	const char *usign_argv[16] = {0};
+	char* usign_argv[16] = {0};
 	unsigned int usign_argc = 0;
 	char fingerprint[17];
 
@@ -221,24 +221,24 @@ int usign_v(const char *msgfile, const char *pubkeyfile,
 	usign_argv[usign_argc++] = USIGN_EXEC;
 	usign_argv[usign_argc++] = "-V";
 	usign_argv[usign_argc++] = "-m";
-	usign_argv[usign_argc++] = msgfile;
+	usign_argv[usign_argc++] = strdup(msgfile);
 
 	if (quiet)
 		usign_argv[usign_argc++] = "-q";
 
 	if (pubkeyfile) {
 		usign_argv[usign_argc++] = "-p";
-		usign_argv[usign_argc++] = pubkeyfile;
+		usign_argv[usign_argc++] = strdup(pubkeyfile);
 	}
 
 	if (pubkeydir) {
 		usign_argv[usign_argc++] = "-P";
-		usign_argv[usign_argc++] = pubkeydir;
+		usign_argv[usign_argc++] = strdup(pubkeydir);
 	}
 
 	if (sigfile) {
 		usign_argv[usign_argc++] = "-x";
-		usign_argv[usign_argc++] = sigfile;
+		usign_argv[usign_argc++] = strdup(sigfile);
 	}
 
 	pid = fork();
