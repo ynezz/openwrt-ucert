@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 
 PROJECT(ucert C)
-ADD_DEFINITIONS(-Os -ggdb -Wall --std=gnu99 -Wmissing-declarations)
+
+ADD_DEFINITIONS(-Os -ggdb -Wall -Wextra -Werror --std=gnu99)
+ADD_DEFINITIONS(-Wno-unused-parameter -Wmissing-declarations)
 
 SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
